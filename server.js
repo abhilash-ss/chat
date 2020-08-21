@@ -1,18 +1,20 @@
-const { ApolloServer } = require("apollo-server");
-const { sequalize } = require("./models");
-const typeDefs = require("./graphql/typeDefs");
-const resolvers = require("./graphql/resolvers");
+const { ApolloServer } = require('apollo-server')
+
+const { sequelize } = require('./models')
+
+const resolvers = require('./graphql/resolvers')
+const typeDefs = require('./graphql/typeDefs')
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
-});
+  resolvers,
+})
 
 server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+  console.log(`🚀 Server ready at ${url}`)
 
-  sequalize
+  sequelize
     .authenticate()
-    .then(() => console.log("Database connected"))
-    .catch((err) => console.log(err));
-});
+    .then(() => console.log('Database connected!!'))
+    .catch((err) => console.log(err))
+})
