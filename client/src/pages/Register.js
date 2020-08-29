@@ -1,16 +1,50 @@
 import React, { useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
+import { gql, useMutation } from "@apollo/client";
+
+const REGISTER_USER = gql`
+  mutation register(
+    $username: String!
+    $email: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    register(
+      username: $username
+      email: $email
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      username
+      email
+      createdAt
+    }
+  }
+`;
 
 export default function Register() {
-  const [formData, setFormData] = useState({
+  const [variables, setVariables] = useState({
     email: "",
     username: "",
     password: "",
     confirmPassword: ""
   });
+
+  const [registerUser, response] = useMutation(REGISTER_USER, {
+    update(_, res) {
+      console.log(res);
+    },
+    onError(err) {
+      console.log(err);
+    }
+  });
+
   const submitRegisterForm = (e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log(variables);
+
+    registerUser({ variables });
+    // console.log("response", response);
   };
 
   return (
@@ -23,9 +57,9 @@ export default function Register() {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              value={formData.email}
+              value={variables.email}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setVariables({ ...variables, email: e.target.value })
               }
             />
           </Form.Group>
@@ -34,9 +68,9 @@ export default function Register() {
             <Form.Control
               type="text"
               placeholder="Enter username"
-              value={formData.username}
+              value={variables.username}
               onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
+                setVariables({ ...variables, username: e.target.value })
               }
             />
           </Form.Group>
@@ -45,9 +79,9 @@ export default function Register() {
             <Form.Control
               type="password"
               placeholder="Enter password"
-              value={formData.password}
+              value={variables.password}
               onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
+                setVariables({ ...variables, password: e.target.value })
               }
             />
           </Form.Group>
@@ -56,9 +90,9 @@ export default function Register() {
             <Form.Control
               type="password"
               placeholder="Enter password"
-              value={formData.confirmPassword}
+              value={variables.confirmPassword}
               onChange={(e) =>
-                setFormData({ ...formData, confirmPassword: e.target.value })
+                setVariables({ ...variables, confirmPassword: e.target.value })
               }
             />
           </Form.Group>
