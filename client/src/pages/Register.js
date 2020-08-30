@@ -30,13 +30,11 @@ export default function Register() {
     confirmPassword: ""
   });
 
+  const [errors, setErrors] = useState({});
+
   const [registerUser, response] = useMutation(REGISTER_USER, {
-    update(_, res) {
-      console.log(res);
-    },
-    onError(err) {
-      console.log(err);
-    }
+    update: (_, res) => console.log("response", res),
+    onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors)
   });
 
   const submitRegisterForm = (e) => {
@@ -53,8 +51,11 @@ export default function Register() {
         <h1 className="text-center">Register</h1>
         <Form onSubmit={submitRegisterForm}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label className={errors.email && "text-danger"}>
+              {errors.email ?? "Email address"}
+            </Form.Label>
             <Form.Control
+              className={errors.email && "is-invalid"}
               type="email"
               placeholder="Enter email"
               value={variables.email}
@@ -63,9 +64,12 @@ export default function Register() {
               }
             />
           </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>username</Form.Label>
+          <Form.Group controlId="formBasicUsername">
+            <Form.Label className={errors.username && "text-danger"}>
+              {errors.username ?? "Username"}
+            </Form.Label>
             <Form.Control
+              className={errors.username && "is-invalid"}
               type="text"
               placeholder="Enter username"
               value={variables.username}
@@ -74,9 +78,12 @@ export default function Register() {
               }
             />
           </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Password</Form.Label>
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label className={errors.password && "text-danger"}>
+              {errors.password ?? "Password"}
+            </Form.Label>
             <Form.Control
+              className={errors.password && "is-invalid"}
               type="password"
               placeholder="Enter password"
               value={variables.password}
@@ -85,9 +92,12 @@ export default function Register() {
               }
             />
           </Form.Group>
-          <Form.Group controlId="formBasicpassword">
-            <Form.Label>Confirm password</Form.Label>
+          <Form.Group controlId="formBasicConfirmPassword">
+            <Form.Label className={errors.confirmPassword && "text-danger"}>
+              {errors.confirmPassword ?? "Confirm password"}
+            </Form.Label>
             <Form.Control
+              className={errors.confirmPassword && "is-invalid"}
               type="password"
               placeholder="Enter password"
               value={variables.confirmPassword}
