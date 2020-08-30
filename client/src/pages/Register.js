@@ -22,7 +22,7 @@ const REGISTER_USER = gql`
   }
 `;
 
-export default function Register() {
+export default function Register(props) {
   const [variables, setVariables] = useState({
     email: "",
     username: "",
@@ -32,17 +32,14 @@ export default function Register() {
 
   const [errors, setErrors] = useState({});
 
-  const [registerUser, response] = useMutation(REGISTER_USER, {
-    update: (_, res) => console.log("response", res),
+  const [registerUser, { loading }] = useMutation(REGISTER_USER, {
+    update: (_, __) => props.history.push("/login"),
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors)
   });
 
   const submitRegisterForm = (e) => {
     e.preventDefault();
-    console.log(variables);
-
     registerUser({ variables });
-    // console.log("response", response);
   };
 
   return (
@@ -108,7 +105,7 @@ export default function Register() {
           </Form.Group>
           <div className="text-center">
             <Button variant="success" type="submit">
-              Register
+              {loading ? "loading..." : "Register"}
             </Button>
           </div>
         </Form>
