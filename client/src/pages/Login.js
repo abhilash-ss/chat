@@ -30,7 +30,6 @@ export default function Login(props) {
   });
 
   const submitLoginForm = (e) => {
-    console.log("submitLogin", e);
     e.preventDefault();
     loginUser({ variables });
   };
